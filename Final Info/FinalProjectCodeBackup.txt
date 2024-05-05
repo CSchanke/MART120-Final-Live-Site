@@ -1,0 +1,115 @@
+function setup() {
+  createCanvas(400, 400);
+}
+var[x,y,d]=[200,290,20];
+var[playerHealth]=[10]
+var gravity = 2;
+var[boltX,boltY,wepLength,wepDam,wepID,wepArea,swing] = [0,350,15,3,1,0,0];
+var[enemyX,enemyY,enemyID] = [20,295,0];
+var spawnCounter = 0;
+var spawnCount = 0;
+var moveSpeed = 2;
+var randOne = 0;
+var wepIDTemp = 0;
+var killCount = 0;
+var roundCounter = 5;
+function draw() {
+  background(220);
+  fill(color='black');
+  swing=0;
+  randOne = random(1,3)
+  spawnCounter++;
+  boltY =350;
+  displayHud();
+  playerControl();
+  checkCollision();
+  failState();
+  wepSwap();
+  checkHit();
+  roundIncrease();
+  spawnEnemy();
+}
+function keyPressed()
+{
+  if(keyCode==87&&y==290){y-=30;}
+  if(keyCode==68){wepLength*=-1}
+  if(keyCode==65){wepLength=abs(wepLength);}
+  if(keyCode==49){wepID=1}
+  if(keyCode==50){wepID=2}
+  if(keyCode==51){wepID=3}
+  if(keyCode==52){wepID=4}
+  if(keyCode==82){stop=0;roundCounter+=5;}
+}
+function checkCollision()
+{
+  if(dist(enemyX,enemyY,x,y)<10)
+      {
+        playerDamageTaken()
+      }
+}
+function playerDamageTaken()
+{
+  playerHealth --;
+  fill(color='red');
+  circle(x,y,d)
+  enemyX-= 60;
+}
+function failState()
+{
+  if(playerHealth<1)
+    {
+      text('You Lose',150,100)
+    }
+}
+function wepSwap()
+{
+  if(wepID!=wepIDTemp){
+    if(wepID==1){wepLength=15;moveSpeed=3;wepArea=10}
+    if(wepID==2){wepLength=25;moveSpeed=2;wepArea=10}
+    if(wepID==3){wepLength=35;moveSpeed=1;wepArea=20}
+    if(wepID==4){wepLength=45;moveSpeed=2;wepArea=10}
+    wepIDTemp=wepID;
+  }
+}
+function checkHit()
+{
+  if(abs(enemyX-boltX)<wepArea && swing==1)
+  {if(randOne>=2){enemyX=20;}
+        else{enemyX=380;}spawncount=0;killCount++;}
+}
+function roundIncrease()
+{
+  if(killCount==roundCounter)
+    {
+      stop=1;
+      text('ROUND COMPLETE',150,100);
+      text('PRESS R TO CONTINUE',150,120);
+    }
+}
+function playerControl()
+{
+   if(keyIsDown(65)){x-=moveSpeed;}
+  if(keyIsDown(68)){x+=moveSpeed;}
+  if(keyIsDown(32)){
+   boltX = x;
+    boltY = y;
+    line(boltX,boltY,(boltX-=wepLength),boltY)
+    swing=1;
+   }
+    if(y<290){y+=gravity;}
+}
+function spawnEnemy()
+{
+  if(spawnCount==0 && stop!=1){circle(enemyX,enemyY,10);}
+  if(enemyX>x){enemyX--;}
+  if(enemyX<x){enemyX++;}
+}
+function displayHud()
+{
+  text('HP:',30,30);
+  text('SCORE:',300,30);
+  text(killCount,320,40);
+  text(playerHealth,30,40);
+  line(0,300,400,300);
+  circle(x,y,d);
+}
