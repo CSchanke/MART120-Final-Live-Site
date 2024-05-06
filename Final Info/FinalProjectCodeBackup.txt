@@ -3,7 +3,7 @@ function setup() {
 }
 var[x,y,d]=[200,290,20];
 var[playerHealth, moveSpeed,killCount]=[10,0,0]
-var[gravity,randOne,roundCounter] = [2,0,5];
+var[gravity,randOne,roundCounter] = [2,0,0];
 var[boltX,boltY,wepLength,wepDam,wepID,wepArea,swing,wepIDTemp] = [0,350,15,3,1,0,0,0];
 var[enemyX,enemyY,enemyID,spawnCounter,spawnCount] = [20,295,0,0,0];
 var wepName = '';
